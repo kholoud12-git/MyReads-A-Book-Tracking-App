@@ -23,16 +23,28 @@ const AllBooks = ({books, onChangeShelf})=> {
                </div>)
                 }
                 <div className="book-shelf-changer">
-                  <select onChange={(e)=>onChangeShelf(book, e.target.value)}>
-                    <option value="none" disabled>
+                  <select  onChange={(e)=>onChangeShelf(book, e.target.value)}>
+                    <option disabled>
                       Move to...
                     </option>
-                    <option value="none">None</option>
-                    <option value="currentlyReading">
-                      Currently Reading
-                    </option>
-                    <option value="wantToRead">Want to Read</option>
-                    <option value="read">Read</option>
+                    
+                    {book.shelf == 'none' ?
+                    (<option value="none" selected><span>&#10003;</span>None</option>):
+                    (<option value="none" >None</option>)
+                    }
+                    {book.shelf == 'currentlyReading' ?
+                    (<option value="currentlyReading" selected><span>&#10003;</span>Currently Reading</option>):
+                    (<option value="currentlyReading" >Currently Reading</option>)
+                    }
+                    {book.shelf == 'wantToRead' ?
+                    (<option value="wantToRead" selected><span>&#10003;</span>Want to Read</option>):
+                    (<option value="wantToRead" >Want to Read</option>)
+                    }
+                    {book.shelf == 'read' ?
+                    (<option value="read" selected><span>&#10003;</span>Read</option>):
+                    (<option value="read" >Read</option>)
+                    }
+                      
                   </select>
                 </div>
               </div>

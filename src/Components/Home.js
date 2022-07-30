@@ -5,6 +5,7 @@ import SearchPage from "./Search";
 function Home() {
   const [showSearchPage, setShowSearchpage] = useState(false);
   const [allBooks, setAllBooks] = useState([]);
+  
   // flag to get false if update shelf is done
   let [flag, setFlag] = useState(true)
 
@@ -65,7 +66,8 @@ function Home() {
                 <div className="bookshelf-books">
                     <AllBooks 
                       books = {allBooks.filter(b=>b.shelf === "currentlyReading")} 
-                      onChangeShelf = {handleChangeShelf}/>
+                      onChangeShelf = {handleChangeShelf}
+                      />
                 </div>
               </div>
               <div className="bookshelf">
@@ -73,7 +75,8 @@ function Home() {
                 <div className="bookshelf-books">
                   <AllBooks 
                     books = {allBooks.filter(b=>b.shelf === "wantToRead")} 
-                    onChangeShelf = {handleChangeShelf}/>
+                    onChangeShelf = {handleChangeShelf}
+                    />
                 </div>
               </div>
               <div className="bookshelf">
@@ -81,7 +84,8 @@ function Home() {
                 <div className="bookshelf-books">
                   <AllBooks 
                     books = {allBooks.filter(b=>b.shelf === "read")} 
-                    onChangeShelf = {handleChangeShelf}/>
+                    onChangeShelf = {handleChangeShelf}
+                    />
                 </div>
               </div>
             </div>

@@ -7,8 +7,11 @@ const SearchPage =({showSearchPage, setShowSearchpage,onChangeShelf,books}) => {
   const [query, setQuery] = useState("");
   const [bookList, setBookList] = useState([])
   const [debouncedText] = useDebounce(query, 500);
+  const shelfs=[
+    {name: 'Currently Reading',title:'currentlyReading'},
+    {name: 'Want To Reading',title:'wantToRead'},
+    {name: 'Read',title:'read'}]
   const numRes = 20;
-
   useEffect(()=>{
     if(debouncedText){
       const getSearchResult = async () => {
@@ -65,16 +68,21 @@ const SearchPage =({showSearchPage, setShowSearchpage,onChangeShelf,books}) => {
                </div>)
                 }
                  <div className="book-shelf-changer">
-                   <select onChange={(e)=> onChangeShelf(book,e.target.value)}>
-                     <option value="none" disabled>
+                   <select  onChange={(e)=> onChangeShelf(book,e.target.value)}>
+                     <option disabled>
                        Move to...
                      </option>
-                     <option value="none">None</option>
-                     <option value="currentlyReading">
-                       Currently Reading
-                     </option>
-                     <option value="wantToRead">Want to Read</option>
-                     <option value="read">Read</option>
+                     {shelfs.map(op => {
+                      if(books.some(b=>b.shelf === op.title)){
+                        return (<option value={op.title} key={op.name}>{op.name}</option>)
+                      }
+                     })}
+                     { // to get bookShelf for book in search page
+                      books.map((b)=>{
+                         if(b.id === book.id){
+                           return (<option value='none' key='none'>None</option>)
+                         }
+                        })}
                    </select>
                  </div>
                </div>
@@ -82,8 +90,8 @@ const SearchPage =({showSearchPage, setShowSearchpage,onChangeShelf,books}) => {
                <div className="book-authors">{book.authors}</div>
               { // to get bookShelf for book in search page
                  books.map((b)=>{
-                  if(b.id == book.id){
-                   return <div className="book-authors" key={b.id}>{b.shelf}</div>
+                  if(b.id === book.id){
+                   return <div className="book-title" key={b.id}>{b.shelf}</div>
                   }
                  })
               }
