@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import * as BookAPI from '../BooksAPI';
+import {Link} from 'react-router-dom';
 import { useEffect } from 'react';
-const SearchPage =({showSearchPage, setShowSearchpage,onChangeShelf,books}) => {
+const SearchPage =({onChangeShelf,books}) => {
   
   const [query, setQuery] = useState("");
   const [bookList, setBookList] = useState([])
@@ -12,6 +13,7 @@ const SearchPage =({showSearchPage, setShowSearchpage,onChangeShelf,books}) => {
     {name: 'Want To Reading',title:'wantToRead'},
     {name: 'Read',title:'read'}]
   const numRes = 20;
+
   useEffect(()=>{
     if(debouncedText){
       const getSearchResult = async () => {
@@ -25,15 +27,17 @@ const SearchPage =({showSearchPage, setShowSearchpage,onChangeShelf,books}) => {
     return () => setBookList([])
   },[debouncedText])
 
+
+  const validatedBooks = bookList.map((searchedBook) => {
+    const myBook = books.filter((myBook) => (myBook.id === searchedBook.id))[0]
+    searchedBook.shelf = myBook ? myBook.shelf : "none"
+    return searchedBook})
+
+
     return ( <div>
   <div className="search-books">
     <div className="search-books-bar">
-      <a
-        className="close-search"
-        onClick={() => setShowSearchpage(!showSearchPage)}
-      >
-        Close
-      </a>
+      <Link className="close-search" to ='/'>Close</Link>
       <div className="search-books-input-wrapper">
         <input
           type="text"
@@ -44,9 +48,9 @@ const SearchPage =({showSearchPage, setShowSearchpage,onChangeShelf,books}) => {
       </div>
     </div>
     <div className="search-books-results">
-      {bookList && bookList.length? 
+      {validatedBooks && validatedBooks.length? 
       (<ol className="books-grid">
-        {bookList.map((book)=>
+        {validatedBooks.map((book)=>
             <li key={book.id}>
              <div className="book">
                <div className="book-top">
@@ -68,33 +72,19 @@ const SearchPage =({showSearchPage, setShowSearchpage,onChangeShelf,books}) => {
                </div>)
                 }
                  <div className="book-shelf-changer">
-                   <select  onChange={(e)=> onChangeShelf(book,e.target.value)}>
+                   <select value={book.shelf} onChange={(e)=> onChangeShelf(book,e.target.value)}>
                      <option disabled>
                        Move to...
                      </option>
-                     {shelfs.map(op => {
-                      if(books.some(b=>b.shelf === op.title)){
-                        return (<option value={op.title} key={op.name}>{op.name}</option>)
-                      }
-                     })}
-                     { // to get bookShelf for book in search page
-                      books.map((b)=>{
-                         if(b.id === book.id){
-                           return (<option value='none' key='none'>None</option>)
-                         }
-                        })}
+                     {shelfs.map(op => 
+                       (<option value={op.title} key={op.title}>{op.name}</option>)
+                     )}
+                     <option value={'none'} >None</option>
                    </select>
                  </div>
                </div>
                <div  className="book-title" >{book.title}</div>
                <div className="book-authors">{book.authors}</div>
-              { // to get bookShelf for book in search page
-                 books.map((b)=>{
-                  if(b.id === book.id){
-                   return <div className="book-title" key={b.id}>{b.shelf}</div>
-                  }
-                 })
-              }
              </div>
            </li>
         )}
