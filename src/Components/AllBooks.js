@@ -1,5 +1,9 @@
 
 const AllBooks = ({books, onChangeShelfs})=> {
+  const shelfs=[
+    {name: 'Currently Reading',title:'currentlyReading'},
+    {name: 'Want To Reading',title:'wantToRead'},
+    {name: 'Read',title:'read'}]
     return ( <div>
       <ol className="books-grid">
         {books.map((book)=>(
@@ -24,29 +28,15 @@ const AllBooks = ({books, onChangeShelfs})=> {
                </div>)
                 }
                 <div className="book-shelf-changer">
-                  <select  onChange={(e)=>onChangeShelfs(book, e.target.value)}>
-                    <option disabled>
-                      Move to...
-                    </option>
-                    
-                    {book.shelf == 'none' ?
-                    (<option value="none" selected>&#10003;None</option>):
-                    (<option value="none" >None</option>)
-                    }
-                    {book.shelf == 'currentlyReading' ?
-                    (<option value="currentlyReading" selected>&#10003;Currently Reading</option>):
-                    (<option value="currentlyReading" >Currently Reading</option>)
-                    }
-                    {book.shelf == 'wantToRead' ?
-                    (<option value="wantToRead" selected>&#10003;Want to Read</option>):
-                    (<option value="wantToRead" >Want to Read</option>)
-                    }
-                    {book.shelf == 'read' ?
-                    (<option value="read" selected>&#10003;Read</option>):
-                    (<option value="read" >Read</option>)
-                    }
-                      
-                  </select>
+                   <select value={book.shelf} onChange={(e)=> onChangeShelfs(book,e.target.value)}>
+                     <option disabled>
+                       Move to...
+                     </option>
+                     {shelfs.map(op => 
+                       (<option value={op.title} key={op.title}>{op.name}</option>)
+                     )}
+                     <option value={'none'} >None</option>
+                   </select>
                 </div>
                 
               </div>
