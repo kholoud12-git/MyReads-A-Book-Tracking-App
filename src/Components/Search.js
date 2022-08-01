@@ -13,12 +13,11 @@ const SearchPage =({onChangeShelf,books}) => {
     {name: 'Want To Reading',title:'wantToRead'},
     {name: 'Read',title:'read'}]
   const numRes = 20;
-
   useEffect(()=>{
     if(debouncedText){
       const getSearchResult = async () => {
         const res =await BookAPI.search(debouncedText,numRes)
-        setBookList(res);
+        setBookList(res)
       }
       getSearchResult();
     } else {
@@ -26,13 +25,13 @@ const SearchPage =({onChangeShelf,books}) => {
     };
     return () => setBookList([])
   },[debouncedText])
-
-
-  const validatedBooks = bookList.map((searchedBook) => {
+  const validatedBooks =
+    bookList.length > 0 ?
+     (bookList.map((searchedBook) => {
     const myBook = books.filter((myBook) => (myBook.id === searchedBook.id))[0]
     searchedBook.shelf = myBook ? myBook.shelf : "none"
-    return searchedBook})
-
+    return searchedBook})) : (<p className='notFound'>Not Found</p>)
+  
 
     return ( <div>
   <div className="search-books">
@@ -48,7 +47,7 @@ const SearchPage =({onChangeShelf,books}) => {
       </div>
     </div>
     <div className="search-books-results">
-      {validatedBooks && validatedBooks.length? 
+      {bookList && bookList.length? 
       (<ol className="books-grid">
         {validatedBooks.map((book)=>
             <li key={book.id}>
